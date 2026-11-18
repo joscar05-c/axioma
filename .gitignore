@@ -1,0 +1,27 @@
+# Python / Backend
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.env
+backend/.env
+
+# Mobile / Expo
+node_modules/
+mobile/.expo/
+mobile/dist/
+mobile/web-build/
+mobile/.env
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# OS & Editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

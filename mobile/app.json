@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "Axioma",
+    "slug": "axioma",
+    "scheme": "axioma",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.axioma.solver"
+    },
+    "android": {
+      "package": "com.axioma.solver"
+    },
+    "plugins": [
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Axioma necesita acceso a tus fotos para escanear problemas de matemáticas, física y química.",
+          "cameraPermission": "Axioma necesita acceso a la cámara para fotografiar ejercicios."
+        }
+      ]
+    ]
+  }
+}
