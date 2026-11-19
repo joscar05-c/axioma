@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { API_URL } from "../lib/api";
 import { supabase } from "../lib/supabase";
 
 export function AuthScreen() {
@@ -28,6 +29,9 @@ export function AuthScreen() {
         const { error } = await supabase.auth.signUp({
           email: email.trim(),
           password,
+          options: {
+            emailRedirectTo: `${API_URL}/auth/confirmed`,
+          },
         });
         if (error) throw error;
         Alert.alert(

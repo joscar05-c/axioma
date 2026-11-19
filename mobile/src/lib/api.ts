@@ -43,7 +43,9 @@ export class UpgradeRequiredError extends Error {
   }
 }
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:8000";
+export const API_URL = (
+  process.env.EXPO_PUBLIC_API_URL ?? "https://axioma-api.vercel.app"
+).replace(/\/$/, "");
 
 async function getAuthHeaders(): Promise<Record<string, string>> {
   const {
