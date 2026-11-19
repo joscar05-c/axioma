@@ -46,3 +46,5 @@ npm install
 copy .env.example .env
 npx expo start
 ```
+
+Si vas a probar la app en **LDPlayer** (Windows), revisa la guía paso a paso en [docs/ldplayer-expo-guide.md](docs/ldplayer-expo-guide.md).
