@@ -94,7 +94,13 @@ export async function solveProblem(params: {
 
   if (!resp.ok) {
     const errBody = await resp.json().catch(() => ({}));
-    throw new Error(errBody?.detail ?? "Error al resolver el problema.");
+    const detail =
+      typeof errBody?.detail === "string"
+        ? errBody.detail
+        : errBody?.detail?.message;
+    throw new Error(
+      detail ?? `Error al resolver el problema (HTTP ${resp.status}).`
+    );
   }
 
   return resp.json();
