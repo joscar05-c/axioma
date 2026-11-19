@@ -19,10 +19,16 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
-    allow_credentials=True,
+    allow_credentials=settings.cors_origins != ["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/")
+def root_status() -> dict[str, str]:
+    """Root endpoint confirming the Axioma API service is online."""
+    return {"status": "ok", "service": "axioma-api", "docs": "/docs"}
 
 
 @app.get("/health")
@@ -46,5 +52,5 @@ def solve_endpoint(
     user: AuthenticatedUser = Depends(get_current_user),
     supabase: Client = Depends(get_supabase_admin),
 ) -> SolveResponse:
-    """Analyze a problem with Gemini and verify with SymPy/Pint/ChemPy."""
+    """Analyze a problem with Gemini and verify with SymPy/Pint."""
     return solve_problem(payload, user, supabase)

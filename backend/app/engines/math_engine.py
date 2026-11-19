@@ -20,6 +20,16 @@ _FORBIDDEN_PATTERN = re.compile(
     r"(__|\bimport\b|\beval\b|\bexec\b|\bopen\b|\blambda\b|\bgetattr\b|\bsetattr\b)"
 )
 
+_SAFE_GLOBALS: dict[str, Any] = {
+    "__builtins__": {},
+    "Integer": sp.Integer,
+    "Float": sp.Float,
+    "Rational": sp.Rational,
+    "Symbol": sp.Symbol,
+    "Function": sp.Function,
+    "Tuple": sp.Tuple,
+}
+
 _BASE_SYMBOLS: dict[str, Any] = {
     "pi": sp.pi,
     "E": sp.E,
@@ -75,7 +85,7 @@ def safe_parse_expr(
         return parse_expr(
             text,
             local_dict=local_dict,
-            global_dict={"__builtins__": {}},
+            global_dict=dict(_SAFE_GLOBALS),
             transformations=_TRANSFORMATIONS,
             evaluate=True,
         )
@@ -103,10 +113,10 @@ def sample_plot_2d(
     num_points: int = 120,
 ) -> PlotData | None:
     """Sample numeric (x, y) points for a single-variable SymPy expression."""
-    var_sym = sp.Symbol(var_name, real=True)
     free = expr.free_symbols
-    if not free.issubset({var_sym}):
+    if not all(sym.name == var_name for sym in free):
         return None
+    var_sym = next(iter(free), sp.Symbol(var_name))
     try:
         fn = sp.lambdify(var_sym, expr, modules=["numpy"])
         xs = np.linspace(x_min, x_max, num_points)
