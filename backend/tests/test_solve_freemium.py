@@ -5,6 +5,7 @@ from app.core.auth import AuthenticatedUser, get_current_user
 from app.core.supabase_client import get_supabase_admin
 from app.main import app
 from app.schemas.solve import AIPlanOutput, PhysicsKnownVar, SolveStep
+from app.services.ai_parser import _build_candidate_models
 import app.services.problem_service as problem_service
 
 
@@ -181,3 +182,10 @@ def test_ai_plan_output_schema_no_additional_properties_and_physics_execution() 
     res = problem_service._execute_deterministic_engine(plan)
     assert res.verified is True
     assert "40" in res.result_text
+
+
+def test_candidate_models_prioritizes_gemini_3_7_flash() -> None:
+    candidates = _build_candidate_models("gemini-3.8-flash")
+    assert candidates[0] == "gemini-3.7-flash"
+    assert "gemini-3.6-flash" in candidates
+    assert _build_candidate_models("gemini-custom")[0] == "gemini-custom"

@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     supabase_url: str = "https://zrkpixnbsvstnlmetwmp.supabase.co"
     supabase_service_role_key: str = ""
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-3.8-flash"
+    gemini_model: str = "gemini-3.7-flash"
     free_daily_limit: int = 5
     environment: str = "development"
     allowed_origins: str = "*"
