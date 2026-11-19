@@ -70,6 +70,16 @@ def safe_parse_expr(
 ) -> sp.Basic:
     """Safely parse a mathematical expression string into a SymPy object."""
     text = (raw or "").strip()
+    text = (
+        text.replace("\\cdot", "*")
+        .replace("\\times", "*")
+        .replace("\\div", "/")
+        .replace("·", "*")
+        .replace("×", "*")
+        .replace("÷", "/")
+        .replace("\\left", "")
+        .replace("\\right", "")
+    )
     if not text:
         raise UnsafeExpressionError("Expression cannot be empty.")
     if len(text) > 500:

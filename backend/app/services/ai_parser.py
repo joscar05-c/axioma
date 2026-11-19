@@ -19,20 +19,26 @@ Reglas estrictas:
      o masa molar (`chem_formula`, ej. "H2SO4").
    - "ai_only": solo si el problema es conceptual/teórico o de ingeniería multi-etapa que no encaja en una sola llamada de los motores anteriores.
      En ese caso proporciona `ai_result_latex` con el resultado final en LaTeX limpio.
-3. Redacta `steps` claros y pedagógicos en español con `title`, `explanation` y `expression_latex`.
-4. `extracted_problem` debe transcribir claramente el enunciado o fórmula detectada.
+3. En `expression` y `physics_equation` usa SIEMPRE operadores Python/SymPy puros (`*`, `/`, `**`, `+`, `-`), NUNCA comandos LaTeX como `\\cdot`, `\\times` o `\\frac`.
+4. Completa SIEMPRE `ai_result_latex` con el resultado final en LaTeX limpio como respaldo adicional en todos los motores.
+5. Redacta `steps` claros y pedagógicos en español con `title`, `explanation` y `expression_latex`.
+6. `extracted_problem` debe transcribir claramente el enunciado o fórmula detectada.
 """
 
 
 _FALLBACK_MODELS: tuple[str, ...] = (
+    "gemini-3-flash-preview",
+    "gemini-3.5-flash-lite",
     "gemini-3.7-flash",
+    "gemini-3.1-flash-lite",
+    "gemini-2.5-flash-lite",
     "gemini-3.6-flash",
     "gemini-3.5-flash",
-    "gemini-3.8-flash",
 )
 _UNSTABLE_OR_RETIRED_DEFAULTS = {
     "",
     "gemini-3.8-flash",
+    "gemini-3.7-flash",
     "gemini-2.5-flash",
     "gemini-flash-latest",
 }
@@ -68,7 +74,14 @@ def analyze_problem_with_gemini(
     if not settings.gemini_api_key:
         raise RuntimeError("GEMINI_API_KEY is not configured on the server.")
 
-    client = genai.Client(api_key=settings.gemini_api_key)
+    try:
+        http_options = types.HttpOptions(
+            timeout=20000,
+            retry_options=types.HttpRetryOptions(attempts=1),
+        )
+        client = genai.Client(api_key=settings.gemini_api_key, http_options=http_options)
+    except Exception:
+        client = genai.Client(api_key=settings.gemini_api_key)
 
     contents: list[object] = []
     prompt_parts = [f"Pista de materia del usuario: {subject_hint}."]

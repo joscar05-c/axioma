@@ -22,3 +22,14 @@ def test_physics_solve_for_unknown_with_conversion() -> None:
     )
     assert res.verified is True
     assert "10" in res.result_text
+
+
+def test_physics_equation_with_latex_cdot() -> None:
+    res = run_physics_engine(
+        equation="d = v \\cdot t",
+        target="d",
+        knowns={"v": "15 m/s", "t": "8 s"},
+        output_unit="m",
+    )
+    assert res.verified is True
+    assert "120" in res.result_text

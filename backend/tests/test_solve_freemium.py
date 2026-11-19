@@ -186,6 +186,6 @@ def test_ai_plan_output_schema_no_additional_properties_and_physics_execution() 
 
 def test_candidate_models_prioritizes_gemini_3_7_flash() -> None:
     candidates = _build_candidate_models("gemini-3.8-flash")
-    assert candidates[0] == "gemini-3.7-flash"
-    assert "gemini-3.6-flash" in candidates
+    assert candidates[0] == "gemini-3-flash-preview"
+    assert "gemini-3.5-flash-lite" in candidates
     assert _build_candidate_models("gemini-custom")[0] == "gemini-custom"
