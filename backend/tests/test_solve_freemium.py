@@ -150,3 +150,11 @@ def test_pro_user_receives_steps_and_plot(monkeypatch) -> None:
         assert body["plot_data"] is not None
     finally:
         app.dependency_overrides.clear()
+
+
+def test_auth_confirmed_page() -> None:
+    client = TestClient(app)
+    resp = client.get("/auth/confirmed")
+    assert resp.status_code == 200
+    assert "text/html" in resp.headers["content-type"]
+    assert "¡Correo confirmado!" in resp.text
