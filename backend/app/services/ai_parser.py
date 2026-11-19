@@ -14,7 +14,7 @@ Reglas estrictas:
    - "math": derivadas, integrales, límites, álgebra, ecuaciones, EDOs, matrices.
      Usa sintaxis Python/SymPy válida en `expression` (ej. "x**2 * sin(x)", "Derivative(y(x), x) + 2*y(x) = 0").
    - "physics": problemas con fórmulas y unidades físicas. Completa `physics_equation` (ej. "F = m * a"),
-     `physics_target` (ej. "F"), `physics_knowns` (ej. {"m": "10 kg", "a": "9.81 m/s**2"}), y `physics_output_unit` (ej. "N").
+     `physics_target` (ej. "F"), `physics_knowns` (ej. [{"symbol": "m", "value": "10 kg"}, {"symbol": "a", "value": "9.81 m/s**2"}]), y `physics_output_unit` (ej. "N").
    - "chemistry": balanceo de reacciones (`chem_reactants`, `chem_products`, ej. ["H2", "O2"] -> ["H2O"])
      o masa molar (`chem_formula`, ej. "H2SO4").
    - "ai_only": solo si el problema es conceptual/teórico o de ingeniería multi-etapa que no encaja en una sola llamada de los motores anteriores.

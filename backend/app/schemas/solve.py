@@ -43,6 +43,13 @@ class SolveRequest(BaseModel):
     image_path: str | None = Field(default=None, max_length=512)
 
 
+class PhysicsKnownVar(BaseModel):
+    """Single known variable and its value with units (e.g. symbol='v', value='10 m/s')."""
+
+    symbol: str
+    value: str
+
+
 class AIPlanOutput(BaseModel):
     """Structured output produced by Gemini before deterministic verification."""
 
@@ -64,7 +71,7 @@ class AIPlanOutput(BaseModel):
     # Physics engine parameters
     physics_equation: str | None = None
     physics_target: str | None = None
-    physics_knowns: dict[str, str] = Field(default_factory=dict)
+    physics_knowns: list[PhysicsKnownVar] = Field(default_factory=list)
     physics_output_unit: str | None = None
     # Chemistry engine parameters
     chem_reactants: list[str] = Field(default_factory=list)

@@ -51,10 +51,15 @@ def _execute_deterministic_engine(plan: AIPlanOutput) -> EngineResult:
                 matrix_rows=plan.matrix_rows,
             )
         if plan.engine == "physics" and plan.physics_equation and plan.physics_target:
+            knowns_dict = {
+                item.symbol.strip(): item.value.strip()
+                for item in plan.physics_knowns
+                if item.symbol.strip() and item.value.strip()
+            }
             return run_physics_engine(
                 equation=plan.physics_equation,
                 target=plan.physics_target,
-                knowns=plan.physics_knowns,
+                knowns=knowns_dict,
                 output_unit=plan.physics_output_unit,
             )
         if plan.engine == "chemistry":

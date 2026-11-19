@@ -1,9 +1,10 @@
+import json
 from types import SimpleNamespace
 from fastapi.testclient import TestClient
 from app.core.auth import AuthenticatedUser, get_current_user
 from app.core.supabase_client import get_supabase_admin
 from app.main import app
-from app.schemas.solve import AIPlanOutput, SolveStep
+from app.schemas.solve import AIPlanOutput, PhysicsKnownVar, SolveStep
 import app.services.problem_service as problem_service
 
 
@@ -158,3 +159,25 @@ def test_auth_confirmed_page() -> None:
     assert resp.status_code == 200
     assert "text/html" in resp.headers["content-type"]
     assert "¡Correo confirmado!" in resp.text
+
+
+def test_ai_plan_output_schema_no_additional_properties_and_physics_execution() -> None:
+    schema_json = json.dumps(AIPlanOutput.model_json_schema())
+    assert "additionalProperties" not in schema_json
+
+    plan = AIPlanOutput(
+        subject="physics",
+        engine="physics",
+        extracted_problem="Distancia recorrida a 5 m/s durante 8 s",
+        summary="La distancia es 40 m.",
+        physics_equation="d = v * t",
+        physics_target="d",
+        physics_knowns=[
+            PhysicsKnownVar(symbol="v", value="5 m/s"),
+            PhysicsKnownVar(symbol="t", value="8 s"),
+        ],
+        physics_output_unit="m",
+    )
+    res = problem_service._execute_deterministic_engine(plan)
+    assert res.verified is True
+    assert "40" in res.result_text
